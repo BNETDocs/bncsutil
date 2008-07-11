@@ -1,0 +1,111 @@
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+configure.py
+
+Created by Eric Naeseth on 2006-08-24.
+Copyright (c) 2006 ionws.com. All rights reserved.
+"""
+
+import sys
+import getopt
+import os.path
+
+
+help_message = '''
+  -h  --help                 This help information
+  -v  --version              Print BNCSutil version
+  -p  --prefix=PREFIX        Install prefix
+  -e  --endian=ORDER         Manually specify byte order
+  -w  --windows              Force build for Windows
+  -d  --enable-debug         Compile in debugging symbols
+      --enable-debug-output  Enable output of debugging information
+      --with-gmp=PATH        Path to GMP library
+      --with-libtool=TOOL    Specify libtool to use
+      --enable-shared        Build shared library (default: yes)
+      --disable-shared
+      --enable-static        Build static library (default: yes)
+      --disable-static
+'''
+
+
+class Usage(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+source = (
+	('bsha1.cpp', None)
+	('cdkeydecoder.cpp', None)
+	('checkrevision.cpp', None)
+	('debug.c', None)
+	('decodekey.cpp', None)
+	('file.c', None)
+	('hashtable.c', None)
+	('libinfo.cpp', None)
+	('nls.c', None)
+	('oldauth.cpp', None)
+	('pe.c', None)
+	('sha1.c', None)
+	('stack.c', None)
+)
+
+common_headers = (
+	'bncsutil.h', 'mutil.h', 'mutil_types.h'
+)
+
+class Makefile(object):
+	
+	def __init__(self, source_files, common_headers):
+		self.source_files = source_files
+		self.common_headers = common_headers
+		self.f = None
+		self.path = os.path.abspath(os.path.dirname(sys.argv[0]))
+		self.decls = {
+			'prefix': '/usr/local',
+			'cbase': os.path.join(self.path, 'src'),
+			'src': os.path.join(self.path, 'src', 'bncsutil'),
+			'tests': os.path.join(self.path, 'tests'),
+			'cc': 'gcc',
+			'cxx': 'g++',
+			'cflags': '-O2 -I$(CBASE)',
+			'ldflags': 
+		}
+	
+	def _decls(self):
+		
+	
+	def generate(self):
+		self.f = open('Makefile', 'w')
+		
+
+
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+    try:
+        try:
+            opts, args = getopt.getopt(argv[1:], "hvp:e:wd",
+				["help", "version", "prefix=", "endian=", "windows",
+				"enable-debug", "enable-debug-output", "with-gmp=",
+				"with-libtool=", "enable-shared", "disable-shared",
+				"enable-static", "disable-static"])
+        except getopt.error, msg:
+            raise Usage(msg)
+    
+        # option processing
+        for option, value in opts:
+            if option == "-v":
+                verbose = True
+            if option in ("-h", "--help"):
+                raise Usage(help_message)
+            if option in ("-o", "--output"):
+                output = value
+    
+    except Usage, err:
+        print >> sys.stderr, sys.argv[0].split("/")[-1] + ": " + str(err.msg)
+        print >> sys.stderr, "\t for help use --help"
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
