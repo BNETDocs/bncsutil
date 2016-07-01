@@ -1,6 +1,6 @@
 AC_INIT([bncsutil], [1.3.2], [bugs@example.com])
 
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 AM_PROG_LIBTOOL
 
 AC_PROG_INSTALL
