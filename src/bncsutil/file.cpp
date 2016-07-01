@@ -236,6 +236,7 @@ file_t file_open(const char* filename, unsigned int mode_flags)
 
 void file_close(file_t file)
 {
+    mapping_map::iterator it;
 
     if (!file) {
         bncsutil_debug_message("error: null pointer given to file_close");
