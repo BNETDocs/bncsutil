@@ -477,7 +477,7 @@ int CDKeyDecoder::processWarCraft3Key() {
 	}
 #endif
 
-	value1 = LSB4(*(uint32_t*) (((char*) values) + 2)) & 0xFFFFFF00;
+	value1 = LSB4(*(uint32_t*) (((char*) values) + 2)) & 0xFFFFFF03;
 
 	w3value2 = new char[10];
 #if LITTLEENDIAN
