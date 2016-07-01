@@ -1,1 +1,0 @@
-LINK /OUT:"Release/BNCSutil.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:".." /DLL /DEF:"bncsutil.def" /DEBUG /PDB:"Release/BNCSutil.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /IMPLIB:"Release/BNCSutil.lib" /MACHINE:X86 kernel32.lib version.lib gmp.lib Release\BNCSutil1.res Release\*.obj ..\manual_build\nls.o user32.lib
