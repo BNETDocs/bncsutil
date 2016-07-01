@@ -211,7 +211,7 @@ file_t file_open(const char* filename, unsigned int mode_flags)
         data = new _file;
     } catch (std::bad_alloc) {
         bncsutil_debug_message_a("Failed to allocate %u bytes to hold"
-            "file structure."), sizeof(struct _file));
+            "file structure.", sizeof(struct _file));
         fclose(f);
         return (file_t) 0;
     }
@@ -221,7 +221,7 @@ file_t file_open(const char* filename, unsigned int mode_flags)
     if (!data->filename) {
         err = sys_error_msg();
         bncsutil_debug_message_a("Failed to allocate %u bytes to hold"
-            "filename; %s"), filename_buf_len);
+            "filename; %s", filename_buf_len);
         free_sys_error_msg(err);
         fclose(f);
         delete data;
