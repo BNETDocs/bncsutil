@@ -5,6 +5,9 @@ aids applications trying to logon to Classic Battle.net&trade; using the binary
 protocol. Specifically, BNCSUtil has functions that help with the cryptography
 of game versions, keys, and passwords.
 
+BNCSUtil was originally written by Eric Naeseth (shadypalm88) and has since
+been maintained over the course of several years by the Battle.net community.
+
 ## Installing
 Simply place the `.so` or `.dll` file in the same directory as the application
 that wishes to use it. If this does not work, install the file into the system
