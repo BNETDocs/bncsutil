@@ -43,10 +43,3 @@ EXPORTS
 	nls_check_signature=_nls_check_signature@8 @34
 	nls_account_change_proof=_nls_account_change_proof@20 @35
 	
-	bncsutil_debug_message=_bncsutil_debug_message@4 @36
-	bncsutil_debug_dump=_bncsutil_debug_dump@8 @37
-	bncsutil_print_dump=_bncsutil_print_dump@12 @38
-	bncsutil_print_dump_win=_bncsutil_print_dump_win@12 @39
-	bncsutil_debug_status=_bncsutil_debug_status@0 @40
-	bncsutil_set_debug_status=_bncsutil_set_debug_status@4 @41
-	bncsutil_internal_debug_messages=_bncsutil_internal_debug_messages@0 @42
