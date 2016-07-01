@@ -19,13 +19,14 @@ $(TARGET): $(CXXOBJ) $(CCOBJ)
 	$(CXX)  $(CXXFLAGS) $(LDFLAGS) $(CXXOBJ) $(CCOBJ) -o $(TARGET)
 
 $(CXXOBJ): %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(CCOBJ): %.o: %.c
 	$(CC) $(CCFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(CCOBJ) $(CXXOBJ) $(TARGET) *~
+
 all:
 	make $(TARGET)
 

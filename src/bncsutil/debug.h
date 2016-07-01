@@ -11,13 +11,13 @@
 
 /* #undef DEBUG */
 /* #if defined(BNCSUTIL_DEBUG_MESSAGES) && BNCSUTIL_DEBUG_MESSAGES */
-/* #	define INTERNAL_DEBUG(msg) bncsutil_debug_message(msg) */
-/* #	define INTERNAL_DUMP(data, length) bncsutil_debug_dump((data), (length)) */
-/* #	define DEBUG 1 */
+/* #    define INTERNAL_DEBUG(msg) bncsutil_debug_message(msg) */
+/* #    define INTERNAL_DUMP(data, length) bncsutil_debug_dump((data), (length)) */
+/* #    define DEBUG 1 */
 /* #else */
-/* #	define INTERNAL_DEBUG(msg) */
-/* #	define INTERNAL_DUMP(data, length) */
-/* #	define DEBUG 0 */
+/* #    define INTERNAL_DEBUG(msg) */
+/* #    define INTERNAL_DUMP(data, length) */
+/* #    define DEBUG 0 */
 /* #endif */
 
 /* #undef DEBUG */
@@ -82,7 +82,7 @@
 /* MEXP(void) bncsutil_print_dump(FILE* stream, const void* data, size_t length); */
 /* #ifdef MOS_WINDOWS */
 /* //MEXP(void) bncsutil_print_dump_win(HANDLE stream, const void* data, */
-/* //	size_t length); */
+/* //    size_t length); */
 /* #endif */
 
 /* #ifdef __cplusplus */
