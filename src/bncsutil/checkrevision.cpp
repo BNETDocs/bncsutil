@@ -124,6 +124,7 @@ MEXP(int) extractMPQNumber(const char* mpqName)
     return mpqNum;
 }
 
+#if !__GNUC__
 const char* basename(const char* file_name)
 {
     const char* base;
@@ -135,6 +136,7 @@ const char* basename(const char* file_name)
 
     return ++base;
 }
+#endif
 
 MEXP(int) checkRevision(const char* formula, const char* files[], int numFiles,
     int mpqNumber, unsigned long* checksum)
