@@ -21,23 +21,23 @@ AC_TRY_RUN([
 #include <sys/types.h>
 int main()
 {
-	uint16_t  s   = 1;
-	uint16_t* ptr = &s;
-	uint8_t   n   = *((uint8_t*)ptr);
-	return n;     
+    uint16_t  s   = 1;
+    uint16_t* ptr = &s;
+    uint8_t   n   = *((uint8_t*)ptr);
+    return n;
 }
 
 ]
 , AC_DEFINE([BIGENDIAN], [1], [Define to 1 if system is big endian])
   [echo "big"]
 , AC_DEFINE([LITTLEENDIAN], [1], [Define to 1 if system is little endian])
-  [echo "little"] 
+  [echo "little"]
 )
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
-	Makefile
-	src/Makefile
+    Makefile
+    src/Makefile
 ])
 
 AC_OUTPUT

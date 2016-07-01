@@ -7,10 +7,10 @@ rm -fr $PKGDIR
 mkdir $PKGDIR
 
 for b in config configure doc product_version src support tests vb6_example \
-	vc7_build vc8_build windows_dist.bat source_dist.sh windows_dist.sh \
-	README-Windows.txt
+    vc7_build vc8_build windows_dist.bat source_dist.sh windows_dist.sh \
+    README-Windows.txt
 do
-	cp -R $SCRIPT_PATH/$b $PKGDIR
+    cp -R $SCRIPT_PATH/$b $PKGDIR
 done
 
 rm -f $PKGDIR.tar.bz2
