@@ -29,7 +29,12 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+
+#if (defined(USE_MPIR) && USE_MPIR)
+#include "mpir.h"
+#else
 #include "gmp.h"
+#endif
 
 struct _nls {
     const char* username;
