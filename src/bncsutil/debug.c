@@ -9,7 +9,9 @@
 #include <bncsutil/debug.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctype.h>
+#include <errno.h>
 #include <stdarg.h>
 #include "mutil.h"
 

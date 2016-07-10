@@ -8,7 +8,7 @@ set(GMP_FIND_QUIETLY TRUE)
 endif (GMP_INCLUDE_DIR AND GMP_LIBRARIES)
 	
 find_path(GMP_INCLUDE_DIR NAMES gmp.h PATHS ${CMAKE_SOURCE_DIR}/depends/include)
-find_library(GMP_LIBRARIES NAMES gmp libgmp PATHS ${CMAKE_SOURCE_DIR}/depends/lib )
+find_library(GMP_LIBRARIES NAMES gmp libgmp libgmp.so.10 PATHS ${CMAKE_SOURCE_DIR}/depends/lib )
 
 MESSAGE(STATUS "GMP libs: " ${GMP_LIBRARIES} " " ${GMPXX_LIBRARIES} )
 include(FindPackageHandleStandardArgs)
