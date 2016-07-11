@@ -13,12 +13,12 @@ Add `bncsutil.h` to your include directory and link against `bncsutil.lib` or `l
 
 ## Building
 CMake is used to generate platform specific build files. The only external dependency is GMP (The GNU Multiple Precision Arithmetic Library ).
-It can be installed with a package manager from any major Linux distro. Debian example: `sudo apt-get install libgmp10`. To force a specific build (32bit or 64bit) build add -DBUILD_32 or -DBUILD_64 to CMake flags.
+It can be installed with a package manager from any major Linux distro. Debian example: `sudo apt-get install libgmp10`. To force a specific build (32bit or 64bit) build add `-DBUILD_32` or `-DBUILD_64` to CMake flags.
 
 ### Windows
 
 #### GMP
-If you are suing an older toolchain like VS 2005 or 2008, the GMP lib and header file is already included for you in `depends/include` and `depends/lib`. You can skip this step.
+If you are using an older toolchain like VS 2005 or 2008, the GMP lib and header file are already included for you in `depends/include` and `depends/lib`. You can skip this step.
 For newer versions of Visual Studio we recommend to use MPIR library instead which is a drop-in replacement for GMP with better Windows support.
  1. Go to http://mpir.org/ and download the latest source archive.
  2. Open the VS solution file depending on which version you use, for example build.vc14 for VS 2015.
