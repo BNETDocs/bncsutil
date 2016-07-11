@@ -13,7 +13,7 @@ set(SOURCE
 	src/bncsutil/oldauth.cpp
 	src/bncsutil/pe.c
 	src/bncsutil/sha1.c
-	src/bncsutil/stack.c	
+	src/bncsutil/stack.c
 )
 
 set(HEADERS
@@ -42,6 +42,18 @@ set(CMAKE_MODULE_PATH CMake/Modules)
 add_library(${PROJECT_NAME} SHARED ${SOURCE} ${HEADERS})
 add_library(${PROJECT_NAME}_static STATIC ${SOURCE} ${HEADERS})
 
+if (BUILD_32)
+       	set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+        MESSAGE(STATUS "Excluding 64bit library paths from search.")
+       	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS OFF)
+	set(ARCH i686)
+elseif (BUILD_64)
+        set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-m64" LINK_FLAGS "-m64")
+	set(ARCH amd64)
+else()
+	set(ARCH amd64)
+endif()
+
 if (USE_MPIR)
 	find_package(MPIR REQUIRED)
 	include_directories(src ${MPIR_INCLUDE_DIR})
@@ -56,11 +68,11 @@ endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME bncsutil)
 
 if(UNIX)
-    set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1.3.2)
-    set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 1)
-	
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3 -Wno-multichar -fPIC")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -Wno-multichar -fPIC")
+    	set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1.3.2)
+	set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 1)
+
+    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3 -Wno-multichar -fPIC")
+    	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -Wno-multichar -fPIC")
 endif()
 
 if (WIN32)
@@ -90,7 +102,7 @@ SET(CPACK_PACKAGE_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "libs")
 SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/BNETDocs/bncsutil")
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "imbacen@gmail.com")
-SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${ARCH})
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgmp10")
 
 #RPM configuration
@@ -99,5 +111,6 @@ SET(CPACK_RPM_PACKAGE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
 SET(CPACK_RPM_PACKAGE_GROUP "${PROJECT_NAME}")
 SET(CPACK_RPM_PACKAGE_URL "https://github.com/BNETDocs/bncsutil")
 SET(CPACK_RPM_PACKAGE_REQUIRES "gmp")
+SET(CPACK_RPM_PACKAGE_ARCHITECTURE ${ARCH})
 
 INCLUDE(CPack)
