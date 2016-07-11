@@ -29,7 +29,7 @@ For newer versions of Visual Studio we recommend to use MPIR library instead whi
  2. CMake will generate sln file in ./build. Open it and build the library.
 
 ### Linux
- 1. Install GMP with the package manager. Also install all the necessary deveklopment tools (gcc, make or build-essential package on Debian).
+ 1. Install GMP with the package manager. Also install all the necessary development tools (gcc, make or build-essential package on Debian).
  2. Run `cmake -G "Unix Makefiles" -B./build -H./`.
  3. `cd build && make && make install`.
 
@@ -40,25 +40,29 @@ You can then use `gdebi` to do a local install of .deb with automatic dependency
 ## Hosted Linux repositories
 DEB and RPM repositories are maintained with best effort.
 
-## Debian (jessie, amd64)
+### Debian (amd64)
  1. To `/etc/apt/sources.list` add:
-```
-#apt.xpam.pl
-deb http://apt.xpam.pl/ jessie main
-```
+
+    ```
+    #apt.xpam.pl
+    deb http://apt.xpam.pl/ jessie main
+    ```
+
  2. Add GPG key: `wget -qO - http://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
  3. Update and install: `sudo apt-get update && sudo apt-get install bncsutil`
 
-## Fedora/CentOS (amd64)
+### Fedora/CentOS (amd64)
  1. In `/etc/yum.repos.d/rpm.xpam.pl.repo` add
-```
-[rpm.xpam.pl]
-name = rpm.xpam.pl
-baseurl = https://rpm.xpam.pl
-```
-or, with dnf on Fedora: `dnf config-manager --add-repo https://rpm.xpam.pl`
+
+    ```
+    [rpm.xpam.pl]
+    name = rpm.xpam.pl
+    baseurl = https://rpm.xpam.pl
+    ```
+
+ or, with dnf on Fedora: `dnf config-manager --add-repo https://rpm.xpam.pl`
  2. If using dnf, make sure to import the public key: `rpm --import https://rpm.xpam.pl/stormlib-pubkey.asc`
  3. Update and install: `yum update && yum install stormlib` or dnf equivalent.
 
-## 32bit RPM
+### Fedora/CentOS (x86)
 TBD
