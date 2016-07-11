@@ -13,7 +13,7 @@ Add `bncsutil.h` to your include directory and link against `bncsutil.lib` or `l
 
 ## Building
 CMake is used to generate platform specific build files. The only external dependency is GMP (The GNU Multiple Precision Arithmetic Library ).
-It can be installed with a package manager from any major Linux distro. Debian example: `sudo apt-get install libgmp10`.
+It can be installed with a package manager from any major Linux distro. Debian example: `sudo apt-get install libgmp10`. To force a specific build (32bit or 64bit) build add -DBUILD_32 or -DBUILD_64 to CMake flags.
 
 ### Windows
 
@@ -64,5 +64,5 @@ DEB and RPM repositories are maintained with best effort.
  2. If using dnf, make sure to import the public key: `rpm --import https://rpm.xpam.pl/stormlib-pubkey.asc`
  3. Update and install: `yum update && yum install stormlib` or dnf equivalent.
 
-### Fedora/CentOS (x86)
-TBD
+### Fedora/CentOS (i686)
+`sudo dnf install bncsutil.i686`
