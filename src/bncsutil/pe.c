@@ -403,7 +403,22 @@ MEXP(int) cm_pe_unload_resources(cm_pe_resdir_t* root)
 MEXP(int) cm_pe_fixed_version(cm_pe_t pe, cm_pe_res_t* res,
                               cm_pe_version_t* ver)
 {
-    cm_pe_section_t* sect = (pe->sections + 3);
+    // find ".rsrc" section
+    cm_pe_section_t* sect = pe->sections;
+    {
+        int i,RsrcFound = 0;
+        for(i=0; i<pe->header.section_count; i++)
+        {
+            if(strcmp(sect->name,".rsrc")==0)
+            {
+                RsrcFound = 1;
+                break;
+            }
+            sect += 1;
+        }
+        if(RsrcFound==0) // no resources ???
+            return 0;
+    }
 #if BIGENDIAN
     uint32_t check = 0xBD04EFFE;
 #else
@@ -412,7 +427,6 @@ MEXP(int) cm_pe_fixed_version(cm_pe_t pe, cm_pe_res_t* res,
     uint32_t rva;
     uint32_t size;
     uint32_t offset;
-    uint32_t align;
 
     if (!pe || !res || !ver)
         return 0;
@@ -429,9 +443,7 @@ MEXP(int) cm_pe_fixed_version(cm_pe_t pe, cm_pe_res_t* res,
 #endif
 
     offset = sect->raw_data_offset + (rva - sect->virtual_address) + 0x26;
-    align = 4 -(offset & 0xF % 4);
-    if (align < 4)
-        offset += align;
+    offset = (offset+3) & 0xFFFFFFFC; // align 4 byte
     if (fseek(pe->f, offset, SEEK_SET) == -1)
         return 0;
     if (fread(ver, sizeof(cm_pe_version_t), 1, pe->f) != 1)
