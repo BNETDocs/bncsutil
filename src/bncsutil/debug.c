@@ -238,7 +238,7 @@ MEXP(void) bncsutil_debug_dump(const void* data, size_t data_length) {
 		return;
 	}
 
-	debug_intense_color(env);
+	//debug_intense_color(env);
 	for (i = 0; i < data_length; i++) {
 		on_boundary = ((i + 1) % 16 == 0);
 
