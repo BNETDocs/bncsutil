@@ -406,17 +406,16 @@ MEXP(int) cm_pe_fixed_version(cm_pe_t pe, cm_pe_res_t* res,
     // find ".rsrc" section
     cm_pe_section_t* sect = pe->sections;
     {
-        int i,RsrcFound = 0;
-        for(i=0; i<pe->header.section_count; i++)
+        int i=0;
+        for(; i<pe->header.section_count; ++i)
         {
-            if(strcmp(sect->name,".rsrc")==0)
+            if(strncmp(sect[i].name,".rsrc",sizeof(sect[i].name))==0)
             {
-                RsrcFound = 1;
+                sect = &sect[i];
                 break;
             }
-            sect += 1;
         }
-        if(RsrcFound==0) // no resources ???
+        if(i == pe->header.section_count) // no resources ???
             return 0;
     }
 #if BIGENDIAN
