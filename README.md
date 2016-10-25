@@ -61,8 +61,8 @@ DEB and RPM repositories are maintained with best effort.
     ```
 
  or, with dnf on Fedora: `dnf config-manager --add-repo https://rpm.xpam.pl`
- 2. If using dnf, make sure to import the public key: `rpm --import https://rpm.xpam.pl/stormlib-pubkey.asc`
- 3. Update and install: `yum update && yum install stormlib` or dnf equivalent.
+ 2. If using dnf, make sure to import the public key: `rpm --import https://rpm.xpam.pl/rpm-pubkey.asc`
+ 3. Update and install: `yum update && yum install bncsutil` or dnf equivalent.
 
 ### Fedora/CentOS (i686)
 `sudo dnf install bncsutil.i686`
