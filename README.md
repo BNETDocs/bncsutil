@@ -45,10 +45,10 @@ DEB and RPM repositories are maintained with best effort.
 
     ```
     #apt.xpam.pl
-    deb http://apt.xpam.pl/ jessie main
+    deb https://apt.xpam.pl/ jessie main
     ```
 
- 2. Add GPG key: `wget -qO - http://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
+ 2. Add GPG key: `wget -qO - https://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
  3. Update and install: `sudo apt-get update && sudo apt-get install bncsutil`
 
 ### Fedora/CentOS (amd64)
