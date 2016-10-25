@@ -1,2 +1,7 @@
 *.o
-/src/bncsutil/libbncsutil.so
+*.so
+Release/
+Debug/
+*.dll
+*.lib
+build/
