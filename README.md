@@ -13,7 +13,7 @@ Add `bncsutil.h` to your include directory and link against `bncsutil.lib` or `l
 
 ## Building
 CMake is used to generate platform specific build files. The only external dependency is GMP (The GNU Multiple Precision Arithmetic Library ).
-It can be installed with a package manager from any major Linux distro. Debian example: `sudo apt-get install libgmp10`. To force a specific build (32bit or 64bit) build add `-DBUILD_32=1` or `-DBUILD_64=1` to CMake flags.
+It can be installed with a package manager from any major Linux distro. Debian example: `sudo apt-get install libgmp10`. To force a specific build (32bit or 64bit) build add `-DBUILD_32=1` or `-DBUILD_64=1` to CMake flags. CMake will not warn you if you are missing 32bit glibc and GMP, you must install them manually first (CentOS/Fedora: `glibc-devel.i686` and `gmp-devel.i686`).
 
 ### Windows
 
