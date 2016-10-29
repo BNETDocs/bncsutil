@@ -1,6 +1,10 @@
 project(bncsutil)
 cmake_minimum_required(VERSION 2.6)
 
+SET(VERSION_MAJOR "1")
+SET(VERSION_MINOR "4")
+SET(VERSION_PATCH "0")
+
 file(GLOB SOURCE
     "src/bncsutil/*.cpp"
     "src/bncsutil/*.c"
@@ -39,7 +43,7 @@ endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME bncsutil)
 
 if(UNIX)
-    	set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1.3.2)
+    	set_target_properties(${PROJECT_NAME} PROPERTIES VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 	set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 1)
 
     	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3 -Wno-multichar -fPIC")
@@ -50,10 +54,6 @@ if (WIN32)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS -DMUTIL_LIB_BUILD=1")
 	target_link_libraries(${PROJECT_NAME} Version.lib)
 endif()
-
-SET(VERSION_MAJOR "1")
-SET(VERSION_MINOR "4")
-SET(VERSION_PATCH "0")
 
 install(TARGETS bncsutil RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 install(FILES src/bncsutil/bncsutil.h DESTINATION include/bncsutil)
