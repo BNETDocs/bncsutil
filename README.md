@@ -64,5 +64,4 @@ DEB and RPM repositories are maintained with best effort.
  2. If using dnf, make sure to import the public key: `rpm --import https://rpm.xpam.pl/rpm-pubkey.asc`
  3. Update and install: `yum update && yum install bncsutil` or dnf equivalent.
 
-### Fedora/CentOS (i686)
-`sudo dnf install bncsutil.i686`
+
