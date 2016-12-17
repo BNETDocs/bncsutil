@@ -40,7 +40,7 @@ You can then use `gdebi` to do a local install of .deb with automatic dependency
 ## Hosted Linux repositories
 DEB and RPM repositories are maintained with best effort.
 
-### Debian (amd64)
+### Debian 7 (amd64)
  1. To `/etc/apt/sources.list` add:
 
     ```
@@ -51,17 +51,20 @@ DEB and RPM repositories are maintained with best effort.
  2. Add GPG key: `wget -qO - https://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
  3. Update and install: `sudo apt-get update && sudo apt-get install bncsutil`
 
-### Fedora/CentOS (amd64)
- 1. In `/etc/yum.repos.d/rpm.xpam.pl.repo` add
+### Recent Fedora releases
+ ```
+dnf config-manager --add-repo https://rpm.xpam.pl
+rpm --import https://rpm.xpam.pl/rpm-pubkey.asc`
+dnf install bncsutil
+```
+### Centos 7
+To be done.
 
-    ```
-    [rpm.xpam.pl]
-    name = rpm.xpam.pl
-    baseurl = https://rpm.xpam.pl
-    ```
-
- or, with dnf on Fedora: `dnf config-manager --add-repo https://rpm.xpam.pl`
- 2. If using dnf, make sure to import the public key: `rpm --import https://rpm.xpam.pl/rpm-pubkey.asc`
- 3. Update and install: `yum update && yum install bncsutil` or dnf equivalent.
-
-
+### Centos 6
+```
+yum install yum-utils
+yum-config-manager --add-repo https://centos6.rpm.xpam.pl
+yum-config-manager --enable https://centos6.rpm.xpam.pl
+rpm --import https://centos6.rpm.xpam.pl/rpm-pubkey.asc
+yum install bncsutil
+```
