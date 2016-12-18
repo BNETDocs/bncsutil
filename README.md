@@ -58,8 +58,13 @@ rpm --import https://rpm.xpam.pl/rpm-pubkey.asc`
 dnf install bncsutil
 ```
 ### Centos 7
-To be done.
-
+```
+yum install yum-utils
+yum-config-manager --add-repo https://centos7.rpm.xpam.pl
+yum-config-manager --enable https://centos7.rpm.xpam.pl
+rpm --import https://centos7.rpm.xpam.pl/rpm-pubkey.asc
+yum install bncsutil
+```
 ### Centos 6
 ```
 yum install yum-utils
