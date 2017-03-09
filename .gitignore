@@ -1,7 +1,13 @@
-*.o
-*.so
-Release/
-Debug/
 *.dll
 *.lib
+*.o
+*.so
+CMakeCache.txt
+CMakeFiles/
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Debug/
+Makefile
+Release/
 build/
+cmake_install.cmake
