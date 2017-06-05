@@ -45,7 +45,7 @@ DEB and RPM repositories are maintained with best effort.
 
     ```
     #apt.xpam.pl
-    deb https://apt.xpam.pl/ jessie main
+    deb [arch=amd64] https://apt.xpam.pl/ jessie main
     ```
 
  2. Add GPG key: `wget -qO - https://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
