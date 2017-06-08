@@ -494,7 +494,7 @@ MEXP(int) getExeInfo(const char* file_name, char* exe_info,
 
     ret = (int) snprintf(exe_info, exe_info_size,
                         "%s %02u/%02u/%02u %02u:%02u:%02u %lu", base,
-                        (time->tm_mon+1), time->tm_mday, time->tm_year,
+                        (time->tm_mon+1), time->tm_mday, (time->tm_year % 100),
                         time->tm_hour, time->tm_min, time->tm_sec, file_size);
 #endif
 
