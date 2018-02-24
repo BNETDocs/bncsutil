@@ -30,8 +30,8 @@ For newer versions of Visual Studio we recommend to use MPIR library instead whi
 
 ### Linux
  1. Install GMP with the package manager. Also install all the necessary development tools (gcc, make or build-essential package on Debian).
- 2. Run `cmake -G "Unix Makefiles" -B./build -H./`.
- 3. `cd build && make && make install`.
+ 2. Run `cmake -G "Unix Makefiles" -B./build -H./`
+ 3. `cd build && make && make install`
 
 ## Building .deb and .rpm packages
 After invoking cmake, cd to build folder and generate them with `cpack -G "DEB"` and `cpack -G "RPM"`.
@@ -40,36 +40,37 @@ You can then use `gdebi` to do a local install of .deb with automatic dependency
 ## Hosted Linux repositories
 DEB and RPM repositories are maintained with best effort.
 
-### Debian 7 (amd64)
+### Debian 8 and 9 (amd64)
  1. To `/etc/apt/sources.list` add:
 
+#### 9
     ```
     #apt.xpam.pl
-    deb [arch=amd64] https://apt.xpam.pl/ jessie main
+    deb http://apt.xpam.pl/debian9/ bnetdocs-stretch main
+    ```
+#### 8
+    ```
+    #apt.xpam.pl
+    deb http://apt.xpam.pl/debian8/ bnetdocs-jessie main
     ```
 
  2. Add GPG key: `wget -qO - https://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
  3. Update and install: `sudo apt-get update && sudo apt-get install bncsutil`
 
-### Recent Fedora releases
- ```
-dnf config-manager --add-repo https://rpm.xpam.pl
-rpm --import https://rpm.xpam.pl/rpm-pubkey.asc`
-dnf install bncsutil
-```
+
 ### Centos 7
 ```
-yum install yum-utils
+yum -y install yum-utils
 yum-config-manager --add-repo https://centos7.rpm.xpam.pl
 yum-config-manager --enable https://centos7.rpm.xpam.pl
-rpm --import https://centos7.rpm.xpam.pl/rpm-pubkey.asc
-yum install bncsutil
+rpm --import https://centos7.rpm.xpam.pl/xpam.pl-pubkey.asc
+yum -y install bncsutil
 ```
 ### Centos 6
 ```
-yum install yum-utils
+yum -y install yum-utils
 yum-config-manager --add-repo https://centos6.rpm.xpam.pl
 yum-config-manager --enable https://centos6.rpm.xpam.pl
-rpm --import https://centos6.rpm.xpam.pl/rpm-pubkey.asc
-yum install bncsutil
+rpm --import https://centos6.rpm.xpam.pl/xpam.pl-pubkey.asc
+yum -y install bncsutil
 ```
