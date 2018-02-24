@@ -44,15 +44,15 @@ DEB and RPM repositories are maintained with best effort.
  1. To `/etc/apt/sources.list` add:
 
 #### 9
-    ```
-    #apt.xpam.pl
-    deb http://apt.xpam.pl/debian9/ bnetdocs-stretch main
-    ```
+```
+#apt.xpam.pl
+deb http://apt.xpam.pl/debian9/ bnetdocs-stretch main
+```
 #### 8
-    ```
-    #apt.xpam.pl
-    deb http://apt.xpam.pl/debian8/ bnetdocs-jessie main
-    ```
+```
+#apt.xpam.pl
+deb http://apt.xpam.pl/debian8/ bnetdocs-jessie main
+```
 
  2. Add GPG key: `wget -qO - https://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
  3. Update and install: `sudo apt-get update && sudo apt-get install bncsutil`
