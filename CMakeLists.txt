@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 
 SET(VERSION_MAJOR "1")
 SET(VERSION_MINOR "4")
-SET(VERSION_PATCH "0")
+SET(VERSION_PATCH "1")
 
 file(GLOB SOURCE
     "src/bncsutil/*.cpp"
