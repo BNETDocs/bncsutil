@@ -1,5 +1,5 @@
 # BNCSUtil
-## Preface
+## Summary
 **BNCSUtil** is the **B**attle.**N**et **C**hat **S**ervice **Util**ity which
 aids applications trying to logon to Classic Battle.net&trade; using the binary
 protocol. Specifically, BNCSUtil has functions that help with the cryptography
