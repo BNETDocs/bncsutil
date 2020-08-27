@@ -12,30 +12,53 @@ been maintained over the course of several years by the open source Battle.net c
 ## Usage
 Add `bncsutil.h` to your include directory and link against `bncsutil.lib` or `libbncsutil.so`.
 
-## Building
-CMake is used to generate platform specific build files. The only external dependency is GMP (The GNU Multiple Precision Arithmetic Library ).
-It can be installed with a package manager from any major Linux distro. Debian example: `sudo apt-get install libgmp10`. To force a specific build (32bit or 64bit) build add `-DBUILD_32=1` or `-DBUILD_64=1` to CMake flags. CMake will not warn you if you are missing 32bit glibc and GMP, you must install them manually first (CentOS/Fedora: `glibc-devel.i686` and `gmp-devel.i686`).
+## Building with conan and CMake
+Conan will automatically install mpir on Windows and gmp on non-Windows platforms.
 
-### Windows
+To force a specific build (32bit or 64bit) add `-DCMAKE_GENERATOR_PLATFORM=x86` or `-DCMAKE_GENERATOR_PLATFORM=x64` to CMake flags. 
 
-#### GMP
-If you are using an older toolchain like VS 2005 or 2008, the GMP lib and header file are already included for you in `depends/include` and `depends/lib`. You can skip this step.
-For newer versions of Visual Studio we recommend to use MPIR library instead which is a drop-in replacement for GMP with better Windows support.
- 1. Go to http://mpir.org/ and download the latest source archive.
- 2. Open the VS solution file depending on which version you use, for example build.vc14 for VS 2015.
- 3. Make a Release build of `lib_mpir_gc` project. This produces `mpir.lib` and `mpir.h` in `build.vc14\lib_mpir_gc\Win32\Release`. Copy the header file to `depends/include` and library to `depends/lib`.
+### Windows Visual Studio 2019
 
-#### VS build
- 1. In root bncsutil folder run `cmake -G "Visual Studio 14 2015" -B./build -H./` if you used GMP or `cmake -G "Visual Studio 14 2015" -B./build -H./ -DUSE_MPIR=1`  if you used MPIR in previous step. Change the Visual Studio version as needed.
- 2. CMake will generate sln file in ./build. Open it and build the library.
+Static
+```
+conan install . -if ./build -s compiler.version=16 -s arch=x86_64 -o *:shared=False
+cmake -G "Visual Studio 16 2019" -B./build -DBUILD_SHARED_LIBS=0 -DCMAKE_GENERATOR_PLATFORM=Win32
+```
+
+Shared
+```
+conan install . -if ./build -s compiler.version=16 -s arch=x86_64 -o *:shared=True
+cmake -G "Visual Studio 16 2019" -B./build -DBUILD_SHARED_LIBS=1 -DCMAKE_GENERATOR_PLATFORM=x64
+```
+
+### Windows Visual Studio 2015
+
+Shared
+```
+conan install . -if ./build -s compiler.version=14 -s arch=x86_64 -o *:shared=True
+cmake -G "Visual Studio 14 2015" -B./build -DBUILD_SHARED_LIBS=1 -DCMAKE_GENERATOR_PLATFORM=x64
+```
+
+
+Open `.sln` in `build` directory and build from Visual Studio.
 
 ### Linux
- 1. Install GMP with the package manager. Also install all the necessary development tools (gcc, make or build-essential package on Debian).
- 2. Run `cmake -G "Unix Makefiles" -B./build -H./`
- 3. `cd build && make && make install`
+```
+conan install . -if ./build
+cmake -G "Unix Makefiles" -B./build
+cd build && make && make install
+```
+
+## Building using system dependencies
+Instead of using conan you can link against system provided gmp. Install `libgmp-dev` on deb distros or `gmp-devel` on rpm distros. For 32bit builds, CMake will not warn you if you are missing 32bit glibc and GMP, you must install them manually first (CentOS/Fedora: `glibc-devel.i686` and `gmp-devel.i686`).
+
+```
+cmake -G "Unix Makefiles" -B./build
+cd build && make && make install
+```
 
 ## Building .deb and .rpm packages
-After invoking cmake, cd to build folder and generate them with `cpack -G "DEB"` and `cpack -G "RPM"`.
+After invoking CMake, cd to build folder and generate them with `cpack -G "DEB"` and `cpack -G "RPM"`.
 You can then use `gdebi` to do a local install of .deb with automatic dependency resolution or `yum localinstall` on rpm distros. For dnf it's just `dnf install <name>.rpm`.
 
 ## Hosted Linux repositories

@@ -35,3 +35,8 @@ Release/
 Thumbs.db
 build/
 cmake_install.cmake
+Findmpir.cmake
+conan.lock
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json

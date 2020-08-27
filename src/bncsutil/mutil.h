@@ -147,6 +147,7 @@
 #endif
 
 #ifdef MOS_WINDOWS
+#  pragma comment(lib, "Version.lib")
 #  ifdef MUTIL_LIB_BUILD
 #    if 1
 #      define MEXP(type) __declspec(dllexport) type __stdcall
