@@ -11,7 +11,7 @@ before_install:
   - sudo apt-get install libgmp10
 install:
   - mkdir build
-  - cmake -G "Unix Makefiles" -B./build -H./
+  - cmake -G "Unix Makefiles" -B./build -H./ -DUSE_SYSTEM_LIBS=1
 script:
   - cd build && make && sudo make install
 notifications:
