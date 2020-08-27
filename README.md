@@ -19,28 +19,16 @@ To force a specific build (32bit or 64bit) add `-DCMAKE_GENERATOR_PLATFORM=x86` 
 
 ### Windows Visual Studio 2019
 
-Static
-```
-conan install . -if ./build -s compiler.version=16 -s arch=x86_64 -o *:shared=False
-cmake -G "Visual Studio 16 2019" -B./build -DBUILD_SHARED_LIBS=0 -DCMAKE_GENERATOR_PLATFORM=Win32
-```
+Version 2019 has compiler version 16, 2015 has compiler version 14.
 
-Shared
+Change `-o *:shared` option if you want to link static or dynamic dependencies.
+
+Change `BUILD_SHARED_LIBS` to build the library as static or shared.
+
 ```
 conan install . -if ./build -s compiler.version=16 -s arch=x86_64 -o *:shared=True
 cmake -G "Visual Studio 16 2019" -B./build -DBUILD_SHARED_LIBS=1 -DCMAKE_GENERATOR_PLATFORM=x64
 ```
-
-### Windows Visual Studio 2015
-
-Shared
-```
-conan install . -if ./build -s compiler.version=14 -s arch=x86_64 -o *:shared=True
-cmake -G "Visual Studio 14 2015" -B./build -DBUILD_SHARED_LIBS=1 -DCMAKE_GENERATOR_PLATFORM=x64
-```
-
-
-Open `.sln` in `build` directory and build from Visual Studio.
 
 ### Linux
 ```
@@ -53,13 +41,13 @@ cd build && make && make install
 Instead of using conan you can link against system provided gmp. Install `libgmp-dev` on deb distros or `gmp-devel` on rpm distros. For 32bit builds, CMake will not warn you if you are missing 32bit glibc and GMP, you must install them manually first (CentOS/Fedora: `glibc-devel.i686` and `gmp-devel.i686`).
 
 ```
-cmake -G "Unix Makefiles" -B./build
+cmake -G "Unix Makefiles" -B./build -DUSE_SYSTEM_LIBS=1
 cd build && make && make install
 ```
 
 ## Building .deb and .rpm packages
 After invoking CMake, cd to build folder and generate them with `cpack -G "DEB"` and `cpack -G "RPM"`.
-You can then use `gdebi` to do a local install of .deb with automatic dependency resolution or `yum localinstall` on rpm distros. For dnf it's just `dnf install <name>.rpm`.
+You can then use `gdebi` to do a local install of .deb with automatic dependency resolution or `yum localinstall` on rpm distros. For dnf it's `dnf install <name>.rpm`.
 
 ## Hosted Linux repositories
 DEB and RPM repositories are maintained with best effort.
