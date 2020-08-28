@@ -1,5 +1,9 @@
 # BNCSUtil
-[![Build Status](https://travis-ci.org/BNETDocs/bncsutil.svg?branch=master)](https://travis-ci.org/BNETDocs/bncsutil)
+
+![GitHub top language](https://img.shields.io/github/languages/top/BNETDocs/bncsutil)
+![License Badge](https://img.shields.io/github/license/BNETDocs/bncsutil)
+![GitHub Workflow Status (master)](https://img.shields.io/github/workflow/status/BNETDocs/bncsutil/CMake/master)
+![GitHub stars](https://img.shields.io/github/stars/BNETDocs/bncsutil?style=social)
 
 **BNCSUtil** is the **B**attle.**N**et **C**hat **S**ervice **Util**ity which
 aids applications trying to logon to Classic Battle.net&trade; using the binary
