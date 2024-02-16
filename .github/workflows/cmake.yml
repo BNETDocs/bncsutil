@@ -7,6 +7,7 @@ env:
 
 jobs:
   build-debian-system-reproducible:
+    if: true
     runs-on: ubuntu-latest
     container:
       image: debian:bookworm
@@ -39,6 +40,7 @@ jobs:
         [ "$hash1" = "$hash2" ] && exit 0 || exit 1
 
   build-debian-conan:
+    if: true
     runs-on: ubuntu-latest
     container:
       image: debian:bookworm
@@ -67,6 +69,7 @@ jobs:
       run: cmake --build .
 
   build-fedora-system:
+    if: true
     runs-on: ubuntu-latest
     container:
       image: fedora:latest
@@ -82,3 +85,32 @@ jobs:
 
     - name: Build
       run: cmake --build ./build
+
+  build-windows-conan:
+    if: true
+    runs-on: windows-latest
+   
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: TheMrMilchmann/setup-msvc-dev@v3
+      with:
+        arch: x64
+
+    - name: Install Conan
+      id: conan
+      uses: turtlebrowser/get-conan@main
+
+    - name: Init conan
+      run: conan profile detect
+
+    - name: Install dependencies
+      shell: cmd 
+      run: conan install . -of build -s build_type=Release -o *:shared=False --build=missing
+    
+    - name: Build
+      shell: cmd
+      working-directory: ./build
+      run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
+
+ 
