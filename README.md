@@ -16,8 +16,7 @@ been maintained over the course of several years by the open source Battle.net c
 ## Usage
 Add `bncsutil.h` to your include directory and link against `bncsutil.lib` or `libbncsutil.so`.
 
-## Building with conan and CMake
-Conan will automatically install mpir on Windows and gmp on non-Windows platforms.
+## Building
 
 To force a specific build (32bit or 64bit) add `-DCMAKE_GENERATOR_PLATFORM=x86` or `-DCMAKE_GENERATOR_PLATFORM=x64` to CMake flags. 
 
@@ -35,17 +34,24 @@ cmake -G "Visual Studio 16 2019" -B./build -DBUILD_SHARED_LIBS=1 -DCMAKE_GENERAT
 ```
 
 ### Linux
+
+#### Using system dependencies
+Instead of using conan you can link against system provided gmp. Install `libgmp-dev` on deb distros or `gmp-devel` on rpm distros. For 32bit builds, CMake will not warn you if you are missing 32bit glibc and GMP, you must install them manually first (CentOS/Fedora: `glibc-devel.i686` and `gmp-devel.i686`).
+
 ```
-conan install . -if ./build
 cmake -G "Unix Makefiles" -B./build
 cd build && make && make install
 ```
 
-## Building using system dependencies
-Instead of using conan you can link against system provided gmp. Install `libgmp-dev` on deb distros or `gmp-devel` on rpm distros. For 32bit builds, CMake will not warn you if you are missing 32bit glibc and GMP, you must install them manually first (CentOS/Fedora: `glibc-devel.i686` and `gmp-devel.i686`).
+#### Using conan
+If you are using pyenv or building python3 from source, make sure you have the following packages installed first:
+```
+sudo apt-get install libbz2-dev liblzma-dev
+```
 
 ```
-cmake -G "Unix Makefiles" -B./build -DUSE_SYSTEM_LIBS=1
+conan install . -of build -s build_type=Release --build=missing
+cmake -G "Unix Makefiles" -B./build -DUSE_SYSTEM_LIBS=0
 cd build && make && make install
 ```
 
@@ -53,40 +59,6 @@ cd build && make && make install
 After invoking CMake, cd to build folder and generate them with `cpack -G "DEB"` and `cpack -G "RPM"`.
 You can then use `gdebi` to do a local install of .deb with automatic dependency resolution or `yum localinstall` on rpm distros. For dnf it's `dnf install <name>.rpm`.
 
-## Hosted Linux repositories
-DEB and RPM repositories are maintained with best effort.
+Note that this is a "devel" package which also includes header files.
 
-### Debian 8 and 9 (amd64)
- 1. To `/etc/apt/sources.list` add:
-
-#### 9
-```
-#apt.xpam.pl
-deb http://apt.xpam.pl/debian9/ bnetdocs-stretch main
-```
-#### 8
-```
-#apt.xpam.pl
-deb http://apt.xpam.pl/debian8/ bnetdocs-jessie main
-```
-
- 2. Add GPG key: `wget -qO - https://apt.xpam.pl/xpam.pl-pubkey.asc | sudo apt-key add -`
- 3. Update and install: `sudo apt-get update && sudo apt-get install bncsutil`
-
-
-### Centos 7
-```
-yum -y install yum-utils
-yum-config-manager --add-repo https://centos7.rpm.xpam.pl
-yum-config-manager --enable https://centos7.rpm.xpam.pl
-rpm --import https://centos7.rpm.xpam.pl/xpam.pl-pubkey.asc
-yum -y install bncsutil
-```
-### Centos 6
-```
-yum -y install yum-utils
-yum-config-manager --add-repo https://centos6.rpm.xpam.pl
-yum-config-manager --enable https://centos6.rpm.xpam.pl
-rpm --import https://centos6.rpm.xpam.pl/xpam.pl-pubkey.asc
-yum -y install bncsutil
-```
+Library installs go to `/usr/lib`, include files in `/usr/include/bncsutil`. 
