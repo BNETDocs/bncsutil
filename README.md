@@ -69,4 +69,4 @@ Note that this is a "devel" package which also includes header files.
 
 Library installs to `/usr/lib`, include files in `/usr/include/bncsutil`.
 
-Packages are also avaialble for download from github releases built on Debian Bookworm and Fedora latest. 
+Packages are also available for download from github releases built on Debian Bookworm and Fedora latest. 
