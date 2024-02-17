@@ -26,7 +26,6 @@ set(HEADERS
     "src/bncsutil/nls.h"
     "src/bncsutil/oldauth.h"
     "src/bncsutil/pe.h"
-    "src/bncsutil/sha1.c"
     "src/bncsutil/sha1.h"
     "src/bncsutil/stack.h"
 )
@@ -39,6 +38,7 @@ set(SOURCES
     "src/bncsutil/file.cpp"
     "src/bncsutil/libinfo.cpp"
     "src/bncsutil/oldauth.cpp"
+    "src/bncsutil/sha1.c"
 )
 
 target_sources(bncsutil PRIVATE ${SOURCES} ${HEADERS})
