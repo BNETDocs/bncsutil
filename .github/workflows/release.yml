@@ -117,7 +117,6 @@ jobs:
       - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
           arch: x86
-          toolset: 17.0
 
       - name: Install Conan
         id: conan
@@ -128,12 +127,12 @@ jobs:
 
       - name: Install dependencies
         shell: cmd
-        run: conan install . -of build -s build_type=Release -o *:shared=False --build=missing
+        run: conan install . -of build -s build_type=Release -s arch_target=x86 -o *:shared=False --build=missing
 
       - name: Build
         shell: cmd
         working-directory: ./build
-        run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_GENERATOR_PLATFORM=x86 -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
+        run: .\conanbuild.bat && cmake .. -DCMAKE_GENERATOR_PLATFORM=x86 -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
 
       - name: Create archive
         working-directory: ./build
