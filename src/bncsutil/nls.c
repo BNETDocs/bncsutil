@@ -90,7 +90,7 @@ const char bncsutil_NLS_sig_n[] = {
 
 unsigned long nls_pre_seed();
 
-void nls_get_x(nls_t* nls, mpz_t x_c, const char* raw_salt);
+void nls_get_x(const nls_t* nls, mpz_t x_c, const char* raw_salt);
 
 void nls_get_v_mpz(nls_t* nls, mpz_t v, mpz_t x);
 
@@ -507,8 +507,7 @@ MEXP(void) nls_get_M1(nls_t* nls, char* out, const char* B, const char* salt) {
 }
 
 MEXP(int) nls_check_M2(nls_t* nls, const char* var_M2, const char* B,
-    const char* salt)
-{
+    const char* salt) {
     SHA1Context sha;
     char local_M2[20];
     char* A;
@@ -674,7 +673,7 @@ unsigned long nls_pre_seed() {
 #endif
 }
 
-void nls_get_x(nls_t* nls, mpz_t x_c, const char* raw_salt) {
+void nls_get_x(const nls_t* nls, mpz_t x_c, const char* raw_salt) {
     char* userpass;
     uint8_t hash[20], final_hash[20];
     SHA1Context shac;

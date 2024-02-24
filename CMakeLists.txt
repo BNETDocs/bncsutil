@@ -37,8 +37,11 @@ set(SOURCES
     "src/bncsutil/decodekey.cpp"
     "src/bncsutil/file.cpp"
     "src/bncsutil/libinfo.cpp"
+    "src/bncsutil/nls.c"
     "src/bncsutil/oldauth.cpp"
+    "src/bncsutil/pe.c"
     "src/bncsutil/sha1.c"
+    "src/bncsutil/stack.c"
 )
 
 target_sources(bncsutil PRIVATE ${SOURCES} ${HEADERS})

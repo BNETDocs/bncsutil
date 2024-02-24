@@ -29,7 +29,11 @@
 #if defined(_MSC_VER) && (defined(HAVE_STDINT_H) && !HAVE_STDINT_H)
  #include "ms_stdint.h"
 #else
+#ifdef __cplusplus
+#include <cstdint>
+#else
 #include <stdint.h>
+#endif
 #endif
 
 #endif /* BNCSUTIL_MUTIL_TYPES_H_INCLUDED */

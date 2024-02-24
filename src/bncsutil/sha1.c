@@ -38,8 +38,8 @@
                 (((word) << (bits)) | ((word) >> (32-(bits))))
 
 /* Local Function Prototyptes */
-void SHA1PadMessage(SHA1Context *);
-void SHA1ProcessMessageBlock(SHA1Context *);
+void SHA1PadMessage(SHA1Context * /*context*/);
+void SHA1ProcessMessageBlock(SHA1Context * /*context*/);
 
 /*
  *  SHA1Reset

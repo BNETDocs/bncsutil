@@ -36,7 +36,11 @@
 
 /* Specific-Sized Integers */
 #include "mutil_types.h"
-#include     <stdlib.h>
+#ifdef __cplusplus
+#include <cstdlib>
+#else
+#include <stdlib.h>
+#endif
 
 // functions for converting a string to a 64-bit number.
 #if defined(_MSC_VER)

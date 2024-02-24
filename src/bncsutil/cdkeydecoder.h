@@ -59,7 +59,7 @@ protected:
     inline char getHexValue(int v);
     inline int getNumValue(char v);
 
-    inline void mult(const int r, const int x, int* a, int dcByte);
+    inline void mult(int r, int x, int* a, int dcByte);
 
 public:
     /**

@@ -35,11 +35,9 @@
     #include <windows.h>
 #else
     #include <pthread.h>
-    #include <errno.h>
-    #include <time.h>
+    #include <ctime>
 #endif
-#include <stdlib.h>
-#include <string.h>
+#include <cstring>
 
 #ifdef __cplusplus
 extern "C" {
@@ -117,14 +115,14 @@ MEXP(int) kd_quick(const char* cd_key, uint32_t client_token,
     CDKeyDecoder kd(cd_key, strlen(cd_key));
     size_t hash_len;
 
-    if (!kd.isKeyValid())
+    if (kd.isKeyValid() == 0)
         return 0;
 
     *public_value = kd.getVal1();
     *product = kd.getProduct();
 
     hash_len = kd.calculateHash(client_token, server_token);
-    if (!hash_len || hash_len > buffer_len)
+    if ((hash_len == 0U) || hash_len > buffer_len)
         return 0;
 
     kd.getHash(hash_buffer);
@@ -143,7 +141,7 @@ MEXP(int) kd_init() {
         return 0;*/
     InitializeCriticalSection(&kd_control);
 #else
-    if (pthread_mutex_init(&mutex, NULL))
+    if (pthread_mutex_init(&mutex, NULL) != 0)
         return 0;
 #endif
     numDecoders = 0;
@@ -183,18 +181,18 @@ unsigned int kd_findAvailable() {
     return i;
 }
 
-MEXP(int) kd_create(const char* cdkey, int keyLength) {
+MEXP(int) kd_create(const char* cdkey, const int keyLength) {
     unsigned int i;
     CDKeyDecoder** d;
     static int dcs_initialized = 0;
 
-    if (!dcs_initialized) {
-        if (!kd_init())
+    if (dcs_initialized == 0) {
+        if (kd_init() == 0)
             return -1;
         dcs_initialized = 1;
     }
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     i = kd_findAvailable();
     if (i == (unsigned int) -1)
@@ -246,10 +244,10 @@ MEXP(int) kd_create(char* cdkey, int keyLength) {
     return (int) i;
 }*/
 
-MEXP(int) kd_free(int decoder) {
+MEXP(int) kd_free(const int decoder) {
     CDKeyDecoder* d;
 
-    if (!kd_lock_decoders()) return 0;
+    if (kd_lock_decoders() == 0) return 0;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return 0;
@@ -269,7 +267,7 @@ MEXP(int) kd_val2Length(int decoder) {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
@@ -288,7 +286,7 @@ MEXP(int) kd_product(int decoder) {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
@@ -303,11 +301,11 @@ MEXP(int) kd_product(int decoder) {
     return value;
 }
 
-MEXP(int) kd_val1(int decoder) {
+MEXP(int) kd_val1(const int decoder) {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
@@ -326,7 +324,7 @@ MEXP(int) kd_val2(int decoder) {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
@@ -341,11 +339,11 @@ MEXP(int) kd_val2(int decoder) {
     return value;
 }
 
-MEXP(int) kd_longVal2(int decoder, char* out) {
+MEXP(int) kd_longVal2(const int decoder, char* out) {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
@@ -360,13 +358,13 @@ MEXP(int) kd_longVal2(int decoder, char* out) {
     return value;
 }
 
-MEXP(int) kd_calculateHash(int decoder, uint32_t clientToken,
-                           uint32_t serverToken)
+MEXP(int) kd_calculateHash(const int decoder, const uint32_t clientToken,
+                           const uint32_t serverToken)
 {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
@@ -381,11 +379,11 @@ MEXP(int) kd_calculateHash(int decoder, uint32_t clientToken,
     return value;
 }
 
-MEXP(int) kd_getHash(int decoder, char* out) {
+MEXP(int) kd_getHash(const int decoder, char* out) {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
@@ -400,11 +398,11 @@ MEXP(int) kd_getHash(int decoder, char* out) {
     return value;
 }
 
-MEXP(int) kd_isValid(int decoder) {
+MEXP(int) kd_isValid(const int decoder) {
     CDKeyDecoder* d;
     int value;
 
-    if (!kd_lock_decoders()) return -1;
+    if (kd_lock_decoders() == 0) return -1;
 
     if ((unsigned int) decoder >= sizeDecoders)
         return -1;
