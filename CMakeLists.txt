@@ -106,7 +106,7 @@ SET(CPACK_PACKAGE_NAME "bncsutil")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Battle.Net Chat Service Utility")
 SET(CPACK_PACKAGE_VENDOR "bncsutil")
 SET(CPACK_PACKAGE_DESCRIPTION "\
-This will install the library to /usr/local/lib and header files to /usr/local/include. \
+This will install the library to /usr/local/lib and header files to /usr/local/include.\n \
 Make sure these directories are in your library and include paths. \
 ")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")

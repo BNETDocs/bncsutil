@@ -69,7 +69,7 @@ jobs:
         name: libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
         path: build/libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
 
-  dll:
+  dll_amd64:
     if: true
     runs-on: windows-latest
    
@@ -106,6 +106,44 @@ jobs:
         overwrite: true
         name: bncsutil_${{ github.ref_name }}_amd64_dll.zip
         path: build/bncsutil_${{ github.ref_name }}_amd64_dll.zip
+
+  dll_x86:
+    if: true
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x86
+
+      - name: Install Conan
+        id: conan
+        uses: turtlebrowser/get-conan@main
+
+      - name: Init conan
+        run: conan profile detect
+
+      - name: Install dependencies
+        shell: cmd
+        run: conan install . -of build -s build_type=Release -o *:shared=False --build=missing
+
+      - name: Build
+        shell: cmd
+        working-directory: ./build
+        run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_GENERATOR_PLATFORM=x86 -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
+
+      - name: Create archive
+        working-directory: ./build
+        run: Compress-Archive -Path Release/* -DestinationPath bncsutil_${{ github.ref_name }}_x86_dll.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          retention-days: 1
+          overwrite: true
+          name: bncsutil_${{ github.ref_name }}_x86_dll.zip
+          path: build/bncsutil_${{ github.ref_name }}_x86_dll.zip
  
 
   release:
@@ -123,10 +161,15 @@ jobs:
       with:
         name: libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
 
-    - name: Download dll
+    - name: Download dll amd64
       uses: actions/download-artifact@v4
       with:
         name: bncsutil_${{ github.ref_name }}_amd64_dll.zip
+
+    - name: Download dll x86
+      uses: actions/download-artifact@v4
+      with:
+        name: bncsutil_${{ github.ref_name }}_x86_dll.zip
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
@@ -135,6 +178,7 @@ jobs:
           libbncsutil-dev_${{ github.ref_name }}_amd64.deb
           libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
           bncsutil_${{ github.ref_name }}_amd64_dll.zip
+          bncsutil_${{ github.ref_name }}_x86_dll.zip
         tag_name: ${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
