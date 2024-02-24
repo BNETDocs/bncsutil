@@ -41,3 +41,5 @@ conanbuildinfo.txt
 conaninfo.txt
 graph_info.json
 CMakeUserPresets.json
+cmake-*
+.idea/
