@@ -147,7 +147,7 @@ jobs:
  
 
   release:
-    needs: [deb, rpm, dll]
+    needs: [deb, rpm, dll_amd64, dll_x86]
     runs-on: ubuntu-latest
 
     steps:
