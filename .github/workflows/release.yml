@@ -94,7 +94,19 @@ jobs:
     - name: Build
       shell: cmd
       working-directory: ./build
-      run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release && dir && dir Release
+      run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
+
+    - name: Create archive
+      working-directory: ./build
+      run: Compress-Archive -Path Release/* -Destination bncsutil_${{ github.ref_name }}_amd64_dll.zip
+
+    - uses: actions/upload-artifact@v4
+      with:
+        retention-days: 1
+        overwrite: true
+        name: bncsutil_${{ github.ref_name }}_amd64_dll.zip
+        path: build/bncsutil_${{ github.ref_name }}_amd64_dll.zip
+ 
 
   release:
     needs: [deb, rpm, dll]
@@ -110,6 +122,11 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
+
+    - name: Download dll
+      uses: actions/download-artifact@v4
+      with:
+        name: bncsutil_${{ github.ref_name }}_amd64_dll.zip
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
@@ -117,6 +134,7 @@ jobs:
         files: |
           libbncsutil-dev_${{ github.ref_name }}_amd64.deb
           libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
+          bncsutil_${{ github.ref_name }}_amd64_dll.zip
         tag_name: ${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
