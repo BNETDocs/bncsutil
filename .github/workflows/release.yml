@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  deb:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: apt-get -y update && apt-get install -y libgmp-dev build-essential cmake
+
+    - name: Cmake
+      run: cmake -G "Unix Makefiles" -B./build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      run: cmake --build ./build
+
+    - name: Package
+      id: package
+      working-directory: build
+      run: |
+        cpack -G "DEB" -D CPACK_PACKAGE_FILE_NAME=libbncsutil-${{ github.ref_name }}-devel
+
+    - uses: actions/upload-artifact@v4
+      with:
+        retention-days: 1
+        overwrite: true
+        name: libbncsutil-${{ github.ref_name }}-devel.deb
+        path: build/libbncsutil-${{ github.ref_name }}-devel.deb
+
+  rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: dnf -y install gmp-devel make automake clang cmake rpm-build
+
+    - name: Cmake
+      run: cmake -G "Unix Makefiles" -B./build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      run: cmake --build ./build
+
+    - name: Package
+      working-directory: build
+      run: cpack -G "RPM" -D CPACK_PACKAGE_FILE_NAME=libbncsutil-${{ github.ref_name }}-devel
+
+    - uses: actions/upload-artifact@v4
+      with:
+        retention-days: 1
+        overwrite: true
+        name: libbncsutil-${{ github.ref_name }}-devel.rpm
+        path: build/libbncsutil-${{ github.ref_name }}-devel.rpm
+
+  release:
+    needs: [deb, rpm]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download deb
+      uses: actions/download-artifact@v4
+      with:
+        name: libbncsutil-${{ github.ref_name }}-devel.deb
+
+    - name: Download rpm
+      uses: actions/download-artifact@v4
+      with:
+        name: libbncsutil-${{ github.ref_name }}-devel.rpm
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          libbncsutil-${{ github.ref_name }}-devel.deb
+          libbncsutil-${{ github.ref_name }}-devel.rpm
+        tag_name: ${{ github.ref_name }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

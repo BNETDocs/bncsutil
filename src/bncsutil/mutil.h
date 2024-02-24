@@ -51,7 +51,7 @@
 #define    ROR(x,n)    _lrotr((x),(n))
 #else
 #ifndef ROL
-#define ROL(a,b) (((a) << (b)) | ((a) >> 32 - (b)))
+#define ROL(a,b) (((a) << (b)) | ((a) >> (32 - (b))))
 #endif
 #ifndef ROR
 #define ROR(a,b) (((a) >> (b)) | ((a) << 32 - (b)))

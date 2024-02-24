@@ -1,11 +1,17 @@
-from conans import ConanFile, CMake
+from conan import ConanFile
+from conan.tools.files import copy
 
 class Bncsutil(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake_find_package"
+    generators = "CMakeDeps", "CMakeToolchain"
 
-    def requirements(self):
-        if self.settings.os == "Windows":
-            self.requires("mpir/3.0.0")
-        else:
-            self.requires("gmp/6.2.0")
+    requires = (
+        "gmp/6.3.0",
+    )
+
+    def generate(self):
+        for dep in self.dependencies.values():
+            if dep.cpp_info.libdirs:
+                copy(self, "*.lib", dep.cpp_info.libdirs[0], self.build_folder)
+            if dep.cpp_info.bindirs:
+                copy(self, "*.dll", dep.cpp_info.bindirs[0], self.build_folder)

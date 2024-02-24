@@ -3,44 +3,114 @@ name: CMake
 on: [push]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
 
 jobs:
-  build:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+  build-debian-system-reproducible:
+    if: true
     runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
-    - name: Create Build Environment
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all subsequent commands
-      run: cmake -E make_directory ${{runner.workspace}}/build
+    - name: Install dependencies
+      run: apt-get -y update && apt-get install -y libgmp-dev build-essential cmake
 
-    - name: Configure CMake
-      # Use a bash shell so we can use the same syntax for environment variable
-      # access regardless of the host operating system
-      shell: bash
-      working-directory: ${{runner.workspace}}/build
-      # Note the current convention is to use the -S and -B options here to specify source 
-      # and build directories, but this is only available with CMake 3.13 and higher.  
-      # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+    - name: Cmake pass 1
+      run: cmake -G "Unix Makefiles" -B./build1 -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build pass 1
+      run: cmake --build ./build1
+
+    - name: Cmake pass 2
+      run: cmake -G "Unix Makefiles" -B./build2 -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build pass 2
+      run: cmake --build ./build2
+
+    - name: Check hashes
+      run: |
+        ls -la build1
+        hash1=$(sha256sum build1/libbncsutil.so | cut -d ' ' -f 1)
+        hash2=$(sha256sum build2/libbncsutil.so | cut -d ' ' -f 1)
+        echo "Hash 1: $hash1\n"
+        echo "Hash 2: $hash2\n"
+        [ "$hash1" = "$hash2" ] && exit 0 || exit 1
+
+  build-debian-conan:
+    if: true
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: apt-get -y update && apt-get install -y python3 python3-pip build-essential cmake
+
+    - name: Install conan
+      run: pip install conan --break-system-packages
+
+    - name: Init conan
+      run: conan profile detect
+
+    - name: Install deps with conan
+      run: conan install . -of ./build -s build_type=Release --build=missing
+
+    - name: Cmake
+      working-directory: ./build
+      run: bash conanbuild.sh && cmake .. -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DUSE_SYSTEM_LIBS=0
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE
+      working-directory: ./build
+      run: cmake --build .
 
-    - name: Test
-      working-directory: ${{runner.workspace}}/build
-      shell: bash
-      # Execute tests defined by the CMake configuration.  
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C $BUILD_TYPE
+  build-fedora-system:
+    if: true
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: dnf -y install gmp-devel make automake clang cmake
+
+    - name: Cmake
+      run: cmake -G "Unix Makefiles" -B./build -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      run: cmake --build ./build
+
+  build-windows-conan:
+    if: true
+    runs-on: windows-latest
+   
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: TheMrMilchmann/setup-msvc-dev@v3
+      with:
+        arch: x64
+
+    - name: Install Conan
+      id: conan
+      uses: turtlebrowser/get-conan@main
+
+    - name: Init conan
+      run: conan profile detect
+
+    - name: Install dependencies
+      shell: cmd 
+      run: conan install . -of build -s build_type=Release -o *:shared=False --build=missing
+    
+    - name: Build
+      shell: cmd
+      working-directory: ./build
+      run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
+
+ 
