@@ -10,6 +10,7 @@ env:
 
 jobs:
   deb:
+    if: true
     runs-on: ubuntu-latest
     container:
       image: debian:bookworm
@@ -30,16 +31,17 @@ jobs:
       id: package
       working-directory: build
       run: |
-        cpack -G "DEB" -D CPACK_PACKAGE_FILE_NAME=libbncsutil-${{ github.ref_name }}-devel
+        cpack -G "DEB" -D CPACK_PACKAGE_FILE_NAME=libbncsutil-dev_${{ github.ref_name }}_amd64
 
     - uses: actions/upload-artifact@v4
       with:
         retention-days: 1
         overwrite: true
-        name: libbncsutil-${{ github.ref_name }}-devel.deb
-        path: build/libbncsutil-${{ github.ref_name }}-devel.deb
+        name: libbncsutil-dev_${{ github.ref_name }}_amd64.deb
+        path: build/libbncsutil-dev_${{ github.ref_name }}_amd64.deb
 
   rpm:
+    if: true
     runs-on: ubuntu-latest
     container:
       image: fedora:latest
@@ -58,36 +60,63 @@ jobs:
 
     - name: Package
       working-directory: build
-      run: cpack -G "RPM" -D CPACK_PACKAGE_FILE_NAME=libbncsutil-${{ github.ref_name }}-devel
+      run: cpack -G "RPM" -D CPACK_PACKAGE_FILE_NAME=libbncsutil-devel-${{ github.ref_name }}.x86_64
 
     - uses: actions/upload-artifact@v4
       with:
         retention-days: 1
         overwrite: true
-        name: libbncsutil-${{ github.ref_name }}-devel.rpm
-        path: build/libbncsutil-${{ github.ref_name }}-devel.rpm
+        name: libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
+        path: build/libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
+
+  dll:
+    if: true
+    runs-on: windows-latest
+   
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: TheMrMilchmann/setup-msvc-dev@v3
+      with:
+        arch: x64
+
+    - name: Install Conan
+      id: conan
+      uses: turtlebrowser/get-conan@main
+
+    - name: Init conan
+      run: conan profile detect
+
+    - name: Install dependencies
+      shell: cmd 
+      run: conan install . -of build -s build_type=Release -o *:shared=False --build=missing
+    
+    - name: Build
+      shell: cmd
+      working-directory: ./build
+      run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release && dir && dir Release
 
   release:
-    needs: [deb, rpm]
+    needs: [deb, rpm, dll]
     runs-on: ubuntu-latest
 
     steps:
     - name: Download deb
       uses: actions/download-artifact@v4
       with:
-        name: libbncsutil-${{ github.ref_name }}-devel.deb
+        name: libbncsutil-dev_${{ github.ref_name }}_amd64.deb
 
     - name: Download rpm
       uses: actions/download-artifact@v4
       with:
-        name: libbncsutil-${{ github.ref_name }}-devel.rpm
+        name: libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          libbncsutil-${{ github.ref_name }}-devel.deb
-          libbncsutil-${{ github.ref_name }}-devel.rpm
+          libbncsutil-dev_${{ github.ref_name }}_amd64.deb
+          libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
         tag_name: ${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
