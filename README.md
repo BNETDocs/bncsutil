@@ -16,7 +16,7 @@ BNCSUtil was originally written by Eric Naeseth (shadypalm88) and has since
 been maintained over the course of several years by the open source Battle.net community.
 
 # Usage
-Add `bncsutil.h` to your include directory and link against `bncsutil.lib` or `libbncsutil.so`.
+`#include <bncsutil/bncsutil.h>` and link against `bncsutil.lib` or `libbncsutil.so`.
 
 # Building
 
@@ -67,8 +67,8 @@ cmake --build . --target install --config Release
 After invoking CMake, cd to build folder and generate them with `cpack -G "DEB"` and `cpack -G "RPM"`.
 You can then use `gdebi` to do a local install of .deb with automatic dependency resolution or `yum localinstall` on rpm distros. For dnf it's `dnf install <name>.rpm`.
 
-Note that this is a "devel" package which also includes header files.
+Note that this is a "development" package which also includes header files.
 
-Library installs to `/usr/lib`, include files in `/usr/include/bncsutil`.
+Library installs to `/usr/local/lib`, include files in `/usr/local/include/bncsutil`.
 
 Packages are also available for download from github releases built on Debian Bookworm and Fedora latest.
