@@ -127,7 +127,7 @@ jobs:
 
       - name: Install dependencies
         shell: cmd
-        run: conan install . -of build -s build_type=Release -s arch_target=x86 -o *:shared=False --build=missing
+        run: conan install . -of build -s build_type=Release -s arch=x86 -o *:shared=False --build=missing
 
       - name: Build
         shell: cmd
