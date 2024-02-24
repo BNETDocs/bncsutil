@@ -1,9 +1,11 @@
 # BNCSUtil
 
-![GitHub top language](https://img.shields.io/github/languages/top/BNETDocs/bncsutil)
-![License Badge](https://img.shields.io/github/license/BNETDocs/bncsutil)
-![GitHub Workflow Status (master)](https://img.shields.io/github/workflow/status/BNETDocs/bncsutil/CMake/master)
-![GitHub stars](https://img.shields.io/github/stars/BNETDocs/bncsutil?style=social)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/BNETDocs/bncsutil/cmake.yml?branch=master&style=flat)](https://github.com/BNETDocs/bncsutil/actions?query=workflow%3ACMake)
+[![GitHub top language](https://img.shields.io/github/languages/top/BNETDocs/bncsutil?style=flat)](https://github.com/BNETDocs/bncsutil)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/BNETDocs/bncsutil?style=flat)
+[![License Badge](https://img.shields.io/github/license/BNETDocs/bncsutil?style=flat)](https://github.com/BNETDocs/bncsutil/blob/master/COPYING)
+[![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/BNETDocs/bncsutil?include_prereleases&label=latest%20release&style=flat)](https://github.com/BNETDocs/bncsutil/releases/latest)
+[![GitHub All Releases](https://img.shields.io/github/downloads/BNETDocs/bncsutil/total?style=flat)](https://github.com/BNETDocs/bncsutil/releases/latest)
 
 **BNCSUtil** is the **B**attle.**N**et **C**hat **S**ervice **Util**ity which
 aids applications trying to logon to Classic Battle.net&trade; using the binary
@@ -69,4 +71,4 @@ Note that this is a "devel" package which also includes header files.
 
 Library installs to `/usr/lib`, include files in `/usr/include/bncsutil`.
 
-Packages are also available for download from github releases built on Debian Bookworm and Fedora latest. 
+Packages are also available for download from github releases built on Debian Bookworm and Fedora latest.
