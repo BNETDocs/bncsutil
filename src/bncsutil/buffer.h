@@ -73,4 +73,4 @@ void buffer_add_u32(msg_buffer_t, uint32_t);
 
 msg_reader_t create_reader(size_t initial_size);
 
-#endif
+#endif /* BUFFER_H */

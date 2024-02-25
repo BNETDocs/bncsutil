@@ -12,7 +12,7 @@ class Bncsutil(ConanFile):
     )
 
     def generate(self):
-        # Workaround for a stupid conan bug producing wrongly named libraries..
+        # Workaround for a conan bug producing wrongly named libraries..
         if self.settings.os == "Windows":
             gmp_libdir = self.dependencies["gmp"].cpp_info.libdir
             gmp_from_name = f"{gmp_libdir}\libgmp.a"
@@ -27,8 +27,8 @@ class Bncsutil(ConanFile):
                 print("Renaming " + gmpxx_from_name + " to " + gmpxx_to_name)
                 rename(self, gmpxx_from_name, gmpxx_to_name)
 
-        for dep in self.dependencies.values():
-            if dep.cpp_info.libdirs:
-                copy(self, "*.lib", dep.cpp_info.libdirs[0], self.build_folder)
-            if dep.cpp_info.bindirs:
-                copy(self, "*.dll", dep.cpp_info.bindirs[0], self.build_folder)
+            for dep in self.dependencies.values():
+                if dep.cpp_info.libdirs:
+                    copy(self, "*.lib", dep.cpp_info.libdirs[0], self.build_folder)
+                if dep.cpp_info.bindirs:
+                    copy(self, "*.dll", dep.cpp_info.bindirs[0], self.build_folder)
