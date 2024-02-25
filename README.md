@@ -69,9 +69,9 @@ If you are using pyenv or building python3 from source, make sure you have `libb
 ```
 conan install . -of build -s build_type=Release --build=missing
 cd build
-./conanbuild.sh
-cmake .. -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DUSE_SYSTEM_LIBS=0
-cmake --build . --target install --config Release
+bash conanbuild.sh
+cmake .. -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_LIBS=0
+cmake --build . --config Release
 ```
 
 ## .deb and .rpm packages
