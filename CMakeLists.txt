@@ -90,7 +90,7 @@ if(UNIX)
 endif()
 
 if (WIN32)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS -DMUTIL_LIB_BUILD=1)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS -DMUTIL_LIB_BUILD)
 endif()
 
 if (MSVC)
@@ -99,8 +99,6 @@ endif()
 
 install(TARGETS bncsutil RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 install(FILES ${HEADERS} DESTINATION include/bncsutil)
-
-message("${CMAKE_INCLUDE_PATH}")
 
 #CPack configuration
 SET(CPACK_GENERATOR "DEB" "RPM")
