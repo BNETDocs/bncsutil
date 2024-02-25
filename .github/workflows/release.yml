@@ -80,6 +80,12 @@ jobs:
       with:
         arch: x64
 
+    - name: Cache Conan
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.conan/p
+
     - name: Install Conan
       id: conan
       uses: turtlebrowser/get-conan@main
@@ -98,7 +104,11 @@ jobs:
 
     - name: Create archive
       working-directory: ./build
-      run: Compress-Archive -Path Release/* -DestinationPath bncsutil_${{ github.ref_name }}_amd64_dll.zip
+      run: |
+        New-Item -ItemType Directory -Path include/bncsutil -Force | Out-Null
+        Copy-Item -Path '../src/bncsutil/*.h' -Destination include/bncsutil
+        Compress-Archive -Path Release/* -DestinationPath bncsutil_${{ github.ref_name }}_amd64_dll.zip
+        Compress-Archive -Path include -DestinationPath "bncsutil_${{ github.ref_name }}_amd64_dll.zip" -Update
 
     - uses: actions/upload-artifact@v4
       with:
@@ -122,12 +132,18 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
 
+      - name: Cache Conan
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.conan/p
+
       - name: Init conan
         run: conan profile detect
 
       - name: Install dependencies
         shell: cmd
-        run: conan install . -of build -s build_type=Release -s arch=x86 -o *:shared=False --build=missing
+        run: conan install . -of build -s build_type=Release -s:h arch=x86 -o *:shared=False --build=missing
 
       - name: Build
         shell: cmd
@@ -136,7 +152,11 @@ jobs:
 
       - name: Create archive
         working-directory: ./build
-        run: Compress-Archive -Path Release/* -DestinationPath bncsutil_${{ github.ref_name }}_x86_dll.zip
+        run: |
+          New-Item -ItemType Directory -Path include/bncsutil -Force | Out-Null
+          Copy-Item -Path '../src/bncsutil/*.h' -Destination include/bncsutil
+          Compress-Archive -Path Release/* -DestinationPath bncsutil_${{ github.ref_name }}_x86_dll.zip
+          Compress-Archive -Path include -DestinationPath "bncsutil_${{ github.ref_name }}_x86_dll.zip" -Update
 
       - uses: actions/upload-artifact@v4
         with:
