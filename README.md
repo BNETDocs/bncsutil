@@ -30,12 +30,23 @@ Conan is used to install dependencies. GMP can't be installed as a shared librar
 
 In `cmd` or Visual Studio dev console run:
 
+### amd64
 ```
 "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x64
 conan install . -of build -s build_type=Release -o *:shared=False --build=missing
 cd build
 .\conanbuild.bat
 cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1
+cmake --build . --config Release
+```
+
+### x86
+```
+"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" x86
+conan install . -of build -s build_type=Release -s:h arch=x86 -o *:shared=False --build=missing
+cd build
+.\conanbuild.bat
+cmake .. -G "Visual Studio 17 2022" -DCMAKE_GENERATOR_PLATFORM=x86 -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1
 cmake --build . --config Release
 ```
 
@@ -72,3 +83,10 @@ Note that this is a "development" package which also includes header files.
 Library installs to `/usr/local/lib`, include files in `/usr/local/include/bncsutil`.
 
 Packages are also available for download from github releases built on Debian Bookworm and Fedora latest.
+
+# Development with CLion
+1. Run conan from cli as per instructions
+2. Open the project
+3. Tools -> CMake -> Change Project Root -> build
+4. Settings -> Build, Execution, Deployment -> CMake -> Add at least this cmake option: -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+

@@ -150,17 +150,18 @@
 #  define MUTIL_LIB_BUILD
 #endif
 
+/**
+ * I think what this tries to do is differentiate if you are trying to build
+ * this as a library exporting symbols versus using the library from this same project
+ * ..which I don't think makes much sense. TODO: evaluate and nuke import part in the future
+ */
 #ifdef MOS_WINDOWS
 #  pragma comment(lib, "Version.lib")
 #  ifdef MUTIL_LIB_BUILD
-#    if 1
-#      define MEXP(type) __declspec(dllexport) type __stdcall
-#    else
-#      define MEXP(type) type __stdcall
-#    endif
+#    define MEXP(type) __declspec(dllexport) type __cdecl
 #    define MCEXP(name) class __declspec(dllexport) name
 #  else
-#    define MEXP(type) __declspec(dllimport) type __stdcall
+#    define MEXP(type) __declspec(dllimport) type __cdecl
 #    define MCEXP(name) class __declspec(dllimport) name
 #  endif
 #else
@@ -177,7 +178,5 @@
 #ifndef NULL
 #define NULL 0
 #endif /* NULL */
-
-// #include <bncsutil/debug.h>
 
 #endif /* MUTIL_H */

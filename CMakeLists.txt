@@ -90,7 +90,8 @@ if(UNIX)
 endif()
 
 if (WIN32)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS -DMUTIL_LIB_BUILD)
+    message("Enabling MUTIL")
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS -DMUTIL_LIB_BUILD=1)
 endif()
 
 if (MSVC)
@@ -100,7 +101,7 @@ endif()
 install(TARGETS bncsutil RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 install(FILES ${HEADERS} DESTINATION include/bncsutil)
 
-#CPack configurtion
+#CPack configuration
 SET(CPACK_GENERATOR "DEB" "RPM")
 SET(CPACK_PACKAGE_NAME "bncsutil")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Battle.Net Chat Service Utility")
