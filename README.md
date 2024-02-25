@@ -85,7 +85,7 @@ Library installs to `/usr/local/lib`, include files in `/usr/local/include/bncsu
 Packages are also available for download from github releases built on Debian Bookworm and Fedora latest.
 
 # Development with CLion
-1. Run conan from cli as per instructions
+1. Run conan from cli as per build instructions above
 2. Open the project
 3. Tools -> CMake -> Change Project Root -> build
 4. Settings -> Build, Execution, Deployment -> CMake -> Add at least this cmake option: -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake

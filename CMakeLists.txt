@@ -90,7 +90,6 @@ if(UNIX)
 endif()
 
 if (WIN32)
-    message("Enabling MUTIL")
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS -DMUTIL_LIB_BUILD=1)
 endif()
 
