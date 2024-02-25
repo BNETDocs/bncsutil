@@ -83,6 +83,7 @@ jobs:
     - name: Cache Conan
       uses: actions/cache@v3
       with:
+        key: conan-windows-amd64
         path: |
           ~/.conan/p
 
@@ -135,6 +136,7 @@ jobs:
       - name: Cache Conan
         uses: actions/cache@v3
         with:
+          key: conan-windows-x86
           path: |
             ~/.conan/p
 
