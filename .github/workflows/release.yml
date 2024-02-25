@@ -85,7 +85,7 @@ jobs:
       with:
         key: conan-windows-amd64-${{ hashFiles('conanfile.py') }}
         path: |
-          ~/.conan/p
+          ~/.conan2/p
 
     - name: Install Conan
       id: conan
@@ -138,7 +138,7 @@ jobs:
         with:
           key: conan-windows-x86-${{ hashFiles('conanfile.py') }}
           path: |
-            ~/.conan/p
+            ~/.conan2/p
 
       - name: Init conan
         run: conan profile detect
