@@ -47,9 +47,9 @@ set(SOURCES
 target_sources(bncsutil PRIVATE ${SOURCES} ${HEADERS})
 
 if (WIN32)
-    set(USE_SYSTEM_LIBS 0)
+    option(USE_SYSTEM_LIBS "Use system libraries" OFF)
 else()
-    set(USE_SYSTEM_LIBS 1)
+    option(USE_SYSTEM_LIBS "Use system libraries" ON)
 endif()
 
 if (CMAKE_GENERATOR_PLATFORM EQUAL "x86")
@@ -99,6 +99,8 @@ endif()
 
 install(TARGETS bncsutil RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 install(FILES ${HEADERS} DESTINATION include/bncsutil)
+
+message("${CMAKE_INCLUDE_PATH}")
 
 #CPack configuration
 SET(CPACK_GENERATOR "DEB" "RPM")
