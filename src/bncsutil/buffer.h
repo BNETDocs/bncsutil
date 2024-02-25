@@ -23,6 +23,9 @@
  * Boston, MA  02111-1307  USA
  */
 
+#ifndef BUFFER_H
+#define BUFFER_H
+
 #include <bncsutil/mutil.h>
 
 typedef struct msg_buffer *msg_buffer_t;
@@ -69,3 +72,5 @@ void buffer_add_32(msg_buffer_t, int32_t);
 void buffer_add_u32(msg_buffer_t, uint32_t);
 
 msg_reader_t create_reader(size_t initial_size);
+
+#endif /* BUFFER_H */

@@ -37,7 +37,7 @@
 #include <bncsutil/pe.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <time.h>
+#include <ctime>
 #endif
 
 #ifndef HIWORD

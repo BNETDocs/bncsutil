@@ -27,6 +27,8 @@
 #ifndef DECODEKEY_H
 #define DECODEKEY_H
 
+#include <bncsutil/mutil.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -37,16 +37,19 @@ set(SOURCES
     "src/bncsutil/decodekey.cpp"
     "src/bncsutil/file.cpp"
     "src/bncsutil/libinfo.cpp"
+    "src/bncsutil/nls.c"
     "src/bncsutil/oldauth.cpp"
+    "src/bncsutil/pe.c"
     "src/bncsutil/sha1.c"
+    "src/bncsutil/stack.c"
 )
 
 target_sources(bncsutil PRIVATE ${SOURCES} ${HEADERS})
 
 if (WIN32)
-    set(USE_SYSTEM_LIBS 0)
+    option(USE_SYSTEM_LIBS "Use system libraries" OFF)
 else()
-    set(USE_SYSTEM_LIBS 1)
+    option(USE_SYSTEM_LIBS "Use system libraries" ON)
 endif()
 
 if (CMAKE_GENERATOR_PLATFORM EQUAL "x86")
@@ -97,16 +100,20 @@ endif()
 install(TARGETS bncsutil RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 install(FILES ${HEADERS} DESTINATION include/bncsutil)
 
-#CPack configurtion
+#CPack configuration
 SET(CPACK_GENERATOR "DEB" "RPM")
 SET(CPACK_PACKAGE_NAME "bncsutil")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Battle.Net Chat Service Utility")
 SET(CPACK_PACKAGE_VENDOR "bncsutil")
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+SET(CPACK_PACKAGE_DESCRIPTION "\
+This will install the library to /usr/local/lib and header files to /usr/local/include.\n \
+Make sure these directories are in your library and include paths. \
+")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
 SET(CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
 SET(CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
 SET(CPACK_PACKAGE_VERSION_PATCH "${VERSION_PATCH}")
+set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local")
 
 #DEB configuration
 SET(CPACK_DEBIAN_PACKAGE_SECTION "libs")

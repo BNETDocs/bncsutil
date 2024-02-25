@@ -69,7 +69,7 @@ jobs:
         name: libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
         path: build/libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
 
-  dll:
+  dll_amd64:
     if: true
     runs-on: windows-latest
    
@@ -79,6 +79,13 @@ jobs:
     - uses: TheMrMilchmann/setup-msvc-dev@v3
       with:
         arch: x64
+
+    - name: Cache Conan
+      uses: actions/cache@v3
+      with:
+        key: conan-windows-amd64-${{ hashFiles('conanfile.py') }}
+        path: |
+          ~/.conan2/p
 
     - name: Install Conan
       id: conan
@@ -98,7 +105,11 @@ jobs:
 
     - name: Create archive
       working-directory: ./build
-      run: Compress-Archive -Path Release/* -Destination bncsutil_${{ github.ref_name }}_amd64_dll.zip
+      run: |
+        New-Item -ItemType Directory -Path include/bncsutil -Force | Out-Null
+        Copy-Item -Path '../src/bncsutil/*.h' -Destination include/bncsutil
+        Compress-Archive -Path Release/* -DestinationPath bncsutil_${{ github.ref_name }}_amd64_dll.zip
+        Compress-Archive -Path include -DestinationPath "bncsutil_${{ github.ref_name }}_amd64_dll.zip" -Update
 
     - uses: actions/upload-artifact@v4
       with:
@@ -106,10 +117,59 @@ jobs:
         overwrite: true
         name: bncsutil_${{ github.ref_name }}_amd64_dll.zip
         path: build/bncsutil_${{ github.ref_name }}_amd64_dll.zip
+
+  dll_x86:
+    if: true
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x86
+
+      - name: Install Conan
+        id: conan
+        uses: turtlebrowser/get-conan@main
+
+      - name: Cache Conan
+        uses: actions/cache@v3
+        with:
+          key: conan-windows-x86-${{ hashFiles('conanfile.py') }}
+          path: |
+            ~/.conan2/p
+
+      - name: Init conan
+        run: conan profile detect
+
+      - name: Install dependencies
+        shell: cmd
+        run: conan install . -of build -s build_type=Release -s:h arch=x86 -o *:shared=False --build=missing
+
+      - name: Build
+        shell: cmd
+        working-directory: ./build
+        run: .\conanbuild.bat && cmake .. -DCMAKE_GENERATOR_PLATFORM=x86 -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
+
+      - name: Create archive
+        working-directory: ./build
+        run: |
+          New-Item -ItemType Directory -Path include/bncsutil -Force | Out-Null
+          Copy-Item -Path '../src/bncsutil/*.h' -Destination include/bncsutil
+          Compress-Archive -Path Release/* -DestinationPath bncsutil_${{ github.ref_name }}_x86_dll.zip
+          Compress-Archive -Path include -DestinationPath "bncsutil_${{ github.ref_name }}_x86_dll.zip" -Update
+
+      - uses: actions/upload-artifact@v4
+        with:
+          retention-days: 1
+          overwrite: true
+          name: bncsutil_${{ github.ref_name }}_x86_dll.zip
+          path: build/bncsutil_${{ github.ref_name }}_x86_dll.zip
  
 
   release:
-    needs: [deb, rpm, dll]
+    needs: [deb, rpm, dll_amd64, dll_x86]
     runs-on: ubuntu-latest
 
     steps:
@@ -123,10 +183,15 @@ jobs:
       with:
         name: libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
 
-    - name: Download dll
+    - name: Download dll amd64
       uses: actions/download-artifact@v4
       with:
         name: bncsutil_${{ github.ref_name }}_amd64_dll.zip
+
+    - name: Download dll x86
+      uses: actions/download-artifact@v4
+      with:
+        name: bncsutil_${{ github.ref_name }}_x86_dll.zip
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
@@ -135,6 +200,7 @@ jobs:
           libbncsutil-dev_${{ github.ref_name }}_amd64.deb
           libbncsutil-devel-${{ github.ref_name }}.x86_64.rpm
           bncsutil_${{ github.ref_name }}_amd64_dll.zip
+          bncsutil_${{ github.ref_name }}_x86_dll.zip
         tag_name: ${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

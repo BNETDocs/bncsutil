@@ -1,6 +1,6 @@
 name: CMake
 
-on: [push]
+on: [push, pull_request]
 
 env:
   BUILD_TYPE: Release
@@ -58,15 +58,15 @@ jobs:
       run: conan profile detect
 
     - name: Install deps with conan
-      run: conan install . -of ./build -s build_type=Release --build=missing
+      run: conan install . -of build -s build_type=$BUILD_TYPE --build=missing
 
     - name: Cmake
-      working-directory: ./build
+      working-directory: build
       run: bash conanbuild.sh && cmake .. -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DUSE_SYSTEM_LIBS=0
 
     - name: Build
-      working-directory: ./build
-      run: cmake --build .
+      working-directory: build
+      run: cmake --build . --config Release
 
   build-fedora-system:
     if: true

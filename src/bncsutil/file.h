@@ -26,8 +26,6 @@
 #ifndef _FILE_H_INCLUDED_
 #define _FILE_H_INCLUDED_ 1
 
-#include <bncsutil/mutil.h>
-
 #ifdef MOS_WINDOWS
 typedef long off_t;
 #else
@@ -45,7 +43,7 @@ typedef struct _file* file_t;
 #define FILE_WRITE    (0x02)
 
 
-file_t file_open(const char* filename, unsigned int mode);
+file_t file_open(const char* filename, unsigned int mode_flags);
 void file_close(file_t file);
 size_t file_read(file_t file, void* ptr, size_t size, size_t count);
 size_t file_write(file_t file, const void* ptr, size_t size,
@@ -59,4 +57,4 @@ void file_unmap(file_t file, const void* mapping);
 }
 #endif
 
-#endif /* FILE */
+#endif /* _FILE_H_INCLUDED_ */

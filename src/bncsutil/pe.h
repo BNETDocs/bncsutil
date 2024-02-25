@@ -27,7 +27,11 @@
 #define CM_PE_H_INCLUDED 1
 
 #include "mutil.h"
+#ifdef __cplusplus
+#include <cstdio>
+#else
 #include <stdio.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

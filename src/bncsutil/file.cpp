@@ -11,8 +11,8 @@
 typedef std::map<const void*, HANDLE> mapping_map;
 #else
 #define BWIN 0
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <sys/mman.h>
 
 typedef std::map<const void*, size_t> mapping_map;
@@ -28,8 +28,6 @@ struct _file
     const char* filename;
     mapping_map mappings;
 };
-
-#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -184,7 +182,7 @@ void file_unmap(file_t file, const void* base)
 
 #else
 
-file_t file_open(const char* filename, unsigned int mode_flags)
+file_t file_open(const char* filename, const unsigned int mode_flags)
 {
     char mode[] = "rb";
     file_t data;
@@ -265,9 +263,9 @@ size_t file_size(file_t file)
     return size_of_file;
 }
 
-void* file_map(file_t file, size_t len, off_t offset)
+void* file_map(file_t file, const size_t len, const off_t offset)
 {
-    int fd = fileno(file->f);
+    const int fd = fileno(file->f);
     void* base = mmap((void*) 0, len, PROT_READ, MAP_SHARED, fd, offset);
     //const char* err;
 
@@ -283,9 +281,9 @@ void* file_map(file_t file, size_t len, off_t offset)
     return base;
 }
 
-void file_unmap(file_t file, const void* base)
+void file_unmap(file_t file, const void* mapping)
 {
-    mapping_map::iterator item = file->mappings.find(base);
+    mapping_map::iterator item = file->mappings.find(mapping);
     size_t len;
 
     if (item == file->mappings.end()) {
@@ -295,7 +293,7 @@ void file_unmap(file_t file, const void* base)
 
     len = (*item).second;
 
-    munmap((void*) base, len);
+    munmap((void*) mapping, len);
 
     file->mappings.erase(item);
 }
