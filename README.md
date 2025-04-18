@@ -18,6 +18,12 @@ been maintained over the course of several years by the open source Battle.net c
 # Usage
 `#include <bncsutil/bncsutil.h>` and link against `bncsutil.lib` or `libbncsutil.so`.
 
+For CMake add:
+```
+find_package(bncsutil REQUIRED)
+target_link_libraries(mytarget PRIVATE bncsutil::bncsutil)
+```
+
 # Building
 
 To force a specific build (32bit or 64bit) add `-DCMAKE_GENERATOR_PLATFORM=x86` or `-DCMAKE_GENERATOR_PLATFORM=x64` to CMake flags.

@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.25)
-project(bncsutil)
+SET(VERSION_MAJOR "1")
+SET(VERSION_MINOR "4")
+SET(VERSION_PATCH "3")
+
+project(bncsutil VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR} "${PROJECT_SOURCE_DIR}/CMake/Modules")
 message(${CMAKE_BINARY_DIR})
-
-SET(VERSION_MAJOR "1")
-SET(VERSION_MINOR "4")
-SET(VERSION_PATCH "2")
 
 add_library(bncsutil SHARED)
 
@@ -97,8 +97,41 @@ if (MSVC)
 	set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "bncsutil")
 endif()
 
-install(TARGETS bncsutil RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+include(CMakePackageConfigHelpers)
+
+install(TARGETS bncsutil
+        EXPORT bncsutilTargets
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        INCLUDES DESTINATION include
+)
+
 install(FILES ${HEADERS} DESTINATION include/bncsutil)
+
+install(EXPORT bncsutilTargets
+        FILE bncsutilTargets.cmake
+        NAMESPACE bncsutil::
+        DESTINATION lib/cmake/bncsutil
+)
+
+configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/CMake/bncsutilConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/bncsutilConfig.cmake"
+        INSTALL_DESTINATION lib/cmake/bncsutil
+)
+
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/bncsutilConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY AnyNewerVersion
+)
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/bncsutilConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/bncsutilConfigVersion.cmake"
+        DESTINATION lib/cmake/bncsutil
+)
 
 #CPack configuration
 SET(CPACK_GENERATOR "DEB" "RPM")
@@ -124,7 +157,7 @@ SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgmp10")
 
 #RPM configuration
 SET(CPACK_RPM_PACKAGE_RELEASE 1)
-SET(CPACK_RPM_PACKAGE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+SET(CPACK_RPM_PACKAGE_LICENSE "LGPL-2.1")
 SET(CPACK_RPM_PACKAGE_GROUP "bncsutil")
 SET(CPACK_RPM_PACKAGE_URL "https://github.com/BNETDocs/bncsutil")
 SET(CPACK_RPM_PACKAGE_REQUIRES "gmp")
