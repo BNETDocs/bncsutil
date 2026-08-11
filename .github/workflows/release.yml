@@ -101,7 +101,7 @@ jobs:
     - name: Build
       shell: cmd
       working-directory: ./build
-      run: .\conanbuild.bat && cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
+      run: .\conanbuild.bat && cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DBUILD_SHARED_LIBS=1 && cmake --build . --config Release
 
     - name: Create archive
       working-directory: ./build
